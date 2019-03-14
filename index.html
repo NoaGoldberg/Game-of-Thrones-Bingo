@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GoT BINGO!</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="html2canvas.js"></script>
+	<script src="FileSaver.js"></script>
+
+	<style type="text/css">
+		img {
+			object-fit: cover;
+			width: 150px;
+			height: 150px;
+			margin-left: 3.3333333333px;
+		}
+		th, tr, td {
+			border: 0;
+			background: white;
+		}
+
+		table {
+			border: 2px solid gray;
+			padding-top: 3px;
+			padding-right: 3px;
+			background: white;
+			border-color: gray;
+		}
+
+		h1 {
+			margin-left: 50px;
+		}
+
+		form {
+			margin-bottom: 6px;
+		}
+
+	</style>
+</head>
+<body>
+	<div ng-app="myApp" ng-controller="myCtrl">
+		<!-- <h1>Game of Thrones BINGO!</h1> -->
+		<form>
+			Name: <input type="text" ng-model="name">
+			<button ng-click="saveTable()">save</button>
+			<button ng-click="reload()">reload</button>
+		</form>
+		<div id="#widget">
+			<table>
+				<tr ng-repeat="x in range(0,rows*rows-1,rows)">
+					<td ng-repeat="i in range(x,x+rows-1)"><img src="{{'characters/' + characters[i] + '.PNG'}}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<br>
+	<i>All rights reserved &copy; Noa Goldberg</i>
+
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function($scope) {
+			$scope.range = function(min, max, step) {
+			    step = step || 1;
+			    var input = [];
+			    for (var i = min; i <= max; i += step) {
+			        input.push(i);
+			    }
+			    return input;
+			};
+			$scope.shuffle = function(array) {
+			  var currentIndex = array.length, temporaryValue, randomIndex;
+
+			  // While there remain elements to shuffle...
+			  while (0 !== currentIndex) {
+
+			    // Pick a remaining element...
+			    randomIndex = Math.floor(Math.random() * currentIndex);
+			    currentIndex -= 1;
+
+			    // And swap it with the current element.
+			    temporaryValue = array[currentIndex];
+			    array[currentIndex] = array[randomIndex];
+			    array[randomIndex] = temporaryValue;
+			  }
+
+			  return array;
+			}
+		    $scope.rows = 3;
+		    $scope.characters = $scope.shuffle([
+			    "arya",
+			    // "benjen",
+			    "beric",
+			    "bran",
+			    "brienne",
+			    "bronn",
+			    "cerci",
+			    "daario",
+			    "dani",
+			    "davos",
+			    "drogon",
+			    "edd tollett",
+			    // "ellaria",
+			    "euron",
+			    "gendry",
+			    "ghost",
+			    "gilly",
+			    "grayworm",
+			    "jaime",
+			    "jon",
+			    "jorah",
+			    // "littlefinger",
+			    // "martell1",
+			    "meera",
+			    "mellisandre",
+			    "missandy",
+			    "mountain",
+			    "nightking",
+			    // "olenna",
+			    "qyburn",
+			    // "randyll",
+			    "rheagal",
+			    "robin",
+			    "sam",
+			    "sansa",
+			    "thehound",
+			    "theon",
+			    "tormound",
+			    "tyrion",
+			    "varys",
+			    // "visarion",
+			    "yara",
+			    "podrick",
+			    "edmure",
+			    "lyanna",
+			    "jaken",
+			    // "thoros",
+			    "babysam",
+			    "roslyn",
+			    // "lis",
+			    "nymeria",
+			    "ilynpayne",
+			    "septa",
+		    ]);
+
+			$scope.reload = function() {
+				location.reload()
+			};
+
+			$scope.saveTable = function() { 
+		        html2canvas($("table"), {
+					onrendered: function(canvas) {
+					    // document.body.appendChild(canvas);
+						canvas.toBlob(function(blob) {
+							saveAs(blob, $scope.name+".png"); 
+						});
+
+						setTimeout(function(){
+							location.reload();
+						}, 200);
+					}
+				});
+			};
+
+		});
+
+		$("input").focus();
+	</script>
+
+</body>
+</html>
